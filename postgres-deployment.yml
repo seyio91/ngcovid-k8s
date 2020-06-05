@@ -23,7 +23,7 @@ spec:
   accessModes:
     - ReadWriteOnce
   hostPath:
-    path: "/home/vagrant/volumes"
+    path: "/home/vagrant/dbdata"
 
 ---
 kind: PersistentVolumeClaim
@@ -58,7 +58,7 @@ spec:
         app: postgres-db
     spec:
       containers:
-        - image: seyio/postgres
+        - image: seyio/postgres:local
           name: postgres-db
           env:
             - name: POSTGRES_PASSWORD
