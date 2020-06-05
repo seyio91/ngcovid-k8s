@@ -7,7 +7,7 @@ spec:
   ports: 
     - port: 5432
   selector:
-    app: ngcovid-db
+    app: postgres-db
 
 ---
 kind: PersistentVolume
