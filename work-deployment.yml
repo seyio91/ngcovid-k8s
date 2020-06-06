@@ -19,7 +19,10 @@ spec:
           name: ngcovid-worker
           env:
             - name: DATABASE_URL
-              value: postgres://scraperuser:password@10.99.249.188:5432/postgres
+              valueFrom:
+                secretKeyRef:
+                  name:  postgres-secrets
+                  key:  dburlpass
             - name: REDIS_HOST
               value: ngcovid-cache
             - name: REDIS_PORT
