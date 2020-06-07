@@ -40,7 +40,10 @@ spec:
               value: ngcovid-cache
             - name: REDIS_PORT
               value: '6379'            
-        - image: seyio/scraper-proxy:local
+        - image: seyio/scraper-proxy
           name: ngcovid-client
+          env:
+            - name: PROXY_ADDRESS
+              value: localhost
           ports:
             - containerPort: 80
