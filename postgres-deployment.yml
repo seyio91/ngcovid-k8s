@@ -76,24 +76,26 @@ spec:
                 configMapKeyRef:
                   name: postgresconfig
                   key: postgresdb
+            - name: PGDATA
+              value: /var/lib/postgresql/data/pgdata
           ports:
             - containerPort: 5432
           volumeMounts:
             - name: postgres-persistent-storage
               mountPath: /var/lib/postgresql/data
+              subPath: datadir
             - name: postgres-persistent-storage
               mountPath: /docker-entrypoint-initdb.d
+              subPath: initdir
       initContainers:
         - name: initializedir
           image: busybox
-          command:
-            - wget
-            - "-O"
-            - "/docker-entrypoint-initdb.d/db-restore.sql"
-            - https://raw.githubusercontent.com/seyio91/scraper-app-dev/master/db-ncdc-restore.sql
+          command: ["/bin/sh", "-c"] 
+          args: ["wget -O /docker-entrypoint-initdb.d/db-restore.sql https://raw.githubusercontent.com/seyio91/scraper-app-dev/master/db-ncdc-restore.sql; /bin/chmod -R 777 /docker-entrypoint-initdb.d/"]
           volumeMounts:
             - name: postgres-persistent-storage
               mountPath: /docker-entrypoint-initdb.d
+              subPath: initdir
       volumes:
         - name: postgres-persistent-storage
           persistentVolumeClaim:
