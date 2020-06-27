@@ -58,7 +58,7 @@ spec:
         app: postgres-db
     spec:
       containers:
-        - image: seyio/postgres:local
+        - image: postgres
           name: postgres-db
           env:
             - name: POSTGRES_PASSWORD
@@ -81,6 +81,19 @@ spec:
           volumeMounts:
             - name: postgres-persistent-storage
               mountPath: /var/lib/postgresql/data
+            - name: postgres-persistent-storage
+              mountPath: /docker-entrypoint-initdb.d
+      initContainers:
+        - name: initializedir
+          image: busybox
+          command:
+            - wget
+            - "-O"
+            - "/docker-entrypoint-initdb.d/db-restore.sql"
+            - https://raw.githubusercontent.com/seyio91/scraper-app-dev/master/db-ncdc-restore.sql
+          volumeMounts:
+            - name: postgres-persistent-storage
+              mountPath: /docker-entrypoint-initdb.d
       volumes:
         - name: postgres-persistent-storage
           persistentVolumeClaim:
